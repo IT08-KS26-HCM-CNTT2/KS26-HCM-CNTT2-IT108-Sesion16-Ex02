@@ -1,0 +1,20 @@
+
+1. Bản thiết kế phân quyền truy cập an toàn (Access Control Matrix)
+Để bảo vệ thông tin nhạy cảm (như SĐT và mức lương kỳ vọng của ứng viên), hệ thống phân chia quyền truy cập thành 3 cấp độ rõ rệt:
+| Đối tượng / Vai trò | Mức quyền truy cập | Mục đích & Giới hạn kỹ thuật |
+| :--- | :--- | :--- |
+| **Trưởng phòng Nhân sự (HR Manager)** | **Editor (Chỉnh sửa toàn quyền)** | Quản lý cấu trúc file, thêm/xóa dòng dữ liệu ứng viên chính thức và phân phối quyền cho các bộ phận. |
+| **Các Trưởng bộ phận (Department Leads)** | **Commenter / Suggesting Mode** | Xem nội dung chi tiết và đưa ra các đánh giá, nhận xét (feedback) trực tiếp trên file mà **không được phép** sửa đổi trực tiếp dữ liệu gốc nếu chưa được HR duyệt. |
+| **Nhân sự nội bộ thông thường / Khách ngoài** | **No Access (Không có quyền) / Viewer giới hạn** | Tuyệt đối không cho phép truy cập đường link công khai (Public link). Chỉ cấp quyền *Viewer* tạm thời khi thực sự cần thiết và **chặn tính năng tải xuống, in ấn, sao chép (Disable download, print, copy)**. |
+2. Kịch bản xử lý sự cố: Xử lý khi lỡ gửi nhầm quyền Editor cho người ngoài
+Khi phát hiện nhân viên vô tình gửi link chứa quyền **Editor** cho ứng viên bên ngoài, cần thực hiện ngay quy trình khẩn cấp 3 bước sau:
+Bước 1: Thu hồi quyền truy cập ngay lập tức (Revoke Access)
+* Truy cập vào phần quản lý chia sẻ (`Share` -> `Manage Access`) trên nền tảng Cloud (Google Drive / OneDrive).
+* Tìm đến tài khoản hoặc đường liên kết chia sẻ công khai đang mang quyền *Editor* và tiến hành **Xóa/Thu hồi quyền (Remove access)** hoặc chuyển liên kết chung từ *Anyone with the link can edit/view* sang chế độ **Restricted (Chỉ những người được mời mới có thể truy cập)**.
+Bước 2: Rà soát nhật ký truy cập (Access Audit Log)
+* Sử dụng tính năng **Activity / Version History** của file hoặc bảng điều khiển quản trị (Admin Console) để kiểm tra lịch sử hoạt động:
+  * Xem tài khoản ngoài đó đã truy cập vào file vào khung giờ nào.
+  * Kiểm tra xem họ có thực hiện thao tác chỉnh sửa, đổi tên, hoặc tạo bản sao (Make a copy) hay không.
+Bước 3: Đánh giá thiệt hại và Khôi phục phiên bản sạch (Clean Version Recovery)
+* **Trường hợp ứng viên đã kịp chỉnh sửa/xóa dữ liệu:** Sử dụng tính năng **Version History** trên Cloud để "quay ngược thời gian", chọn lại mốc thời gian trước khi xảy ra sự cố và bấm **Restore** để khôi phục lại hiện trạng dữ liệu sạch ban đầu.
+* **Đề xuất phòng ngừa:** Thiết lập chính sách cấm chia sẻ tệp ra bên ngoài tổ chức đối với các thư mục chứa dữ liệu nhạy cảm (Data Loss Prevention - DLP).
